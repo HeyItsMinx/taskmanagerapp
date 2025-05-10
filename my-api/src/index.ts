@@ -9,9 +9,9 @@ const app = express();
 app.use(express.json());
 const { PORT = 3000 } = process.env;
 
-app.get("api", (req: Request, res: Response) => {
-  res.status(505).json({ message: "Bad Request" });
-});
+// app.get("*", (req: Request, res: Response) => {
+//   res.status(505).json({ message: "Bad Request" });
+// });
 
 AppDataSource.initialize()
   .then(async () => {
