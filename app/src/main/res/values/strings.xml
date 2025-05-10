@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Task Manager App</string>
+    <string name="wait_api">Waiting for API response..</string>
+    <string name="call_api">Call API</string>
 </resources>
