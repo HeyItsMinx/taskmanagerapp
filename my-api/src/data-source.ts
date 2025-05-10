@@ -12,11 +12,11 @@ const {
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "",
-    database: "tm_db",
+    host: MYSQL_HOST || "localhost",
+    port: parseInt(MYSQL_PORT || "3306"),
+    username: MYSQL_USERNAME,
+    password: MYSQL_PASSWORD,
+    database: MYSQL_PASSWORD,
     synchronize: true,
     logging: false,
     entities: [Task, Category],
