@@ -1,0 +1,17 @@
+services:
+  mysql_db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+    env_file:
+      - .env
+    environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+       MYSQL_USER: ${MYSQL_USERNAME}
+       MYSQL_DATABASE: ${MYSQL_DBNAME}
+
+volumes:
+  db: 
