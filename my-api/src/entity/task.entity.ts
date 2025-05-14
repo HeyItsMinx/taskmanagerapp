@@ -1,20 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm"
 import { Category } from "./category.entity";
 
-@Entity()
+@Entity({name: 'tasks'})
 export class Task {
     @PrimaryGeneratedColumn()
-    id: number
+    id:number;
 
     @Column()
-    title:string
+    title:string;
+
+    @Column()
+    description:string;
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
     @Column()
-    done:boolean
+    done:boolean;
 
     @ManyToOne(() => Category, (category) => category.tasks)
-    category: Category
+    @JoinColumn({name: 'category_id'})
+    category: Category;
 }
