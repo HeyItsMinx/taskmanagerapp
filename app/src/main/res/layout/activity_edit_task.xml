@@ -20,7 +20,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Entry Task"
+                android:text="Edit Task"
                 android:textAppearance="?attr/textAppearanceHeadlineSmall"
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="24dp"

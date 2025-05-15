@@ -10,18 +10,18 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.example.taskmanagerapp.R
 import com.example.taskmanagerapp.api.ApiClient
-import com.example.taskmanagerapp.databinding.ActivityCreateTaskBinding
+import com.example.taskmanagerapp.databinding.ActivityEditTaskBinding
 import kotlinx.coroutines.launch
 
 class EditTaskActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCreateTaskBinding
+    private lateinit var binding: ActivityEditTaskBinding
     private var taskId: Int = -1
     private var selectedCategoryId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCreateTaskBinding.inflate(layoutInflater)
+        binding = ActivityEditTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val btnBack: ImageButton = findViewById(R.id.btnBack)
@@ -29,15 +29,18 @@ class EditTaskActivity : AppCompatActivity() {
             finish()
         }
 
+
+        // Get intent extras
         taskId = intent.getIntExtra("task_id", -1)
         val title = intent.getStringExtra("title") ?: ""
         val description = intent.getStringExtra("description") ?: ""
         val categoryName = intent.getStringExtra("category_name") ?: "Regular"
 
+        // Set existing task data
         binding.etTaskName.setText(title)
         binding.etTaskDescription.setText(description)
 
-        // Map the category to RadioButton
+        // Set category radio button and track selected category ID
         when (categoryName.lowercase()) {
             "important" -> {
                 binding.rbImportant.isChecked = true
@@ -61,16 +64,10 @@ class EditTaskActivity : AppCompatActivity() {
             }
         }
 
+        // Save button
         binding.btnSave.setOnClickListener {
             val updatedTitle = binding.etTaskName.text.toString().trim()
             val updatedDescription = binding.etTaskDescription.text.toString().trim()
-
-            val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
-            ViewCompat.setOnApplyWindowInsetsListener(toolbar) { view, insets ->
-                val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-                view.updatePadding(top = statusBarHeight)
-                insets
-            }
 
             if (updatedTitle.isEmpty()) {
                 Toast.makeText(this, "Please enter task name", Toast.LENGTH_SHORT).show()
@@ -99,9 +96,9 @@ class EditTaskActivity : AppCompatActivity() {
             }
         }
 
+        // Cancel button
         binding.btnCancel.setOnClickListener {
             finish()
         }
     }
 }
-
