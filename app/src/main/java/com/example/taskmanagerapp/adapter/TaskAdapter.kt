@@ -59,7 +59,7 @@ class TaskAdapter(
         holder.btnDelete.setOnClickListener { onDelete(task) }
 
         // Toggle done / undone
-        holder.btnDone.text = if (task.done) "Undone" else "Done"
+        holder.btnDone.text = if (task.done) "Done" else "Finish"
         holder.btnDone.setOnClickListener { onDone(task) }
 
         if (task.done) {
@@ -69,9 +69,9 @@ class TaskAdapter(
             holder.updated.setTextColor(gray)
             holder.description.setTextColor(gray)
 
-            holder.btnEdit.alpha = 0.4f
             holder.btnDone.alpha = 0.4f
-            holder.btnDelete.alpha = 0.4f
+            holder.btnEdit.visibility = View.GONE
+            holder.btnDelete.visibility = View.GONE
 
             holder.btnEdit.isEnabled = false
             holder.btnDelete.isEnabled = false
@@ -90,6 +90,9 @@ class TaskAdapter(
 
             holder.btnEdit.isEnabled = true
             holder.btnDelete.isEnabled = true
+
+            holder.btnEdit.visibility = View.VISIBLE
+            holder.btnDelete.visibility = View.VISIBLE
         }
     }
 
