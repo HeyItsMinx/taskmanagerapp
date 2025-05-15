@@ -1,7 +1,17 @@
+# IDE/editor settings
 .idea/
 .vscode/
-node_modules/
+
+# Build outputs
 build/
+dist/
+
+# Temporary files
 tmp/
 temp/
+
+# Environment files
 .env
+
+# Node modules
+node_modules/
