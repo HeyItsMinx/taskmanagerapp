@@ -7,7 +7,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.taskmanagerapp.api.ApiClient
 import com.example.taskmanagerapp.databinding.ActivityCreateTaskBinding
 import com.example.taskmanagerapp.model.Category
-import com.example.taskmanagerapp.model.TaskRequest
 import kotlinx.coroutines.launch
 import android.util.Log
 
@@ -36,21 +35,21 @@ class CreateTaskActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 🔁 Prepare request body
-            val taskRequest = TaskRequest(
-                title = taskName,
-                description = taskDescription,
-                category_id = selectedCategory.id
+            val taskBody = mapOf(
+                "title" to taskName,
+                "description" to taskDescription,
+                "category_id" to selectedCategory.id
             )
 
-            // 🌐 Call API
             lifecycleScope.launch {
                 try {
-                    val response = ApiClient.apiService.createTask(taskRequest)
+                    val response = ApiClient.apiService.createTask(taskBody)
                     if (response.isSuccessful) {
                         Toast.makeText(this@CreateTaskActivity, "Task successfully created!", Toast.LENGTH_SHORT).show()
-                        finish() // Close
+                        finish()
                     } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("CreateTaskActivity", "Failed Creating Task: $errorBody")
                         Toast.makeText(this@CreateTaskActivity, "Failed to create task", Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {

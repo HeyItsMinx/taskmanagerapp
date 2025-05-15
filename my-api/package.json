@@ -5,10 +5,11 @@
    "type": "commonjs",
    "devDependencies": {
       "@types/express": "^5.0.1",
-      "@types/node": "^22.13.10",
+      "@types/node": "^22.15.18",
       "concurrently": "^9.1.2",
       "ts-node": "^10.9.2",
-      "typescript": "^5.8.2"
+      "ts-node-dev": "^2.0.0",
+      "typescript": "^5.8.3"
    },
    "dependencies": {
       "body-parser": "^2.2.0",
@@ -22,10 +23,9 @@
    },
    "scripts": {
       "watch": "tsc -w",
-      "dev": "nodemon build/index.js",
-      "start:dev": "concurrently \"tsc -w\" \"nodemon build/index.js\"",
-      "build": "tsc",
+      "dev": "ts-node-dev src/index.ts",
       "start": "ts-node src/index.ts",
+      "build": "tsc",
       "typeorm": "typeorm-ts-node-commonjs",
       "migration": " npm run typeorm migration:run -- -d ./src/data-source.ts"
    }

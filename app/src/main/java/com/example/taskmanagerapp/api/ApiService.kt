@@ -5,21 +5,21 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
-    @GET("tasks")
+    @GET("api/task")
     suspend fun getTasks(): TaskResponse
 
-    @GET("categories")
+    @GET("api/category")
     suspend fun getCategories(): CategoryResponse
 
-    @POST("tasks")
-    suspend fun createTask(@Body task: TaskRequest): Response<Unit>
+    @POST("api/task")
+    suspend fun createTask(@Body task: Map<String, @JvmSuppressWildcards Any>): Response<Unit>
 
-    @PUT("tasks/{id}")
+    @PUT("api/task/{id}")
     suspend fun updateTask(@Path("id") id: Int, @Body task: Map<String, Any>): Response<Unit>
 
-    @PUT("tasks/{id}/done")
+    @PUT("task/{id}/done")
     suspend fun finishTask(@Path("id") id: Int): Response<Unit>
 
-    @DELETE("tasks/{id}")
+    @DELETE("task/{id}")
     suspend fun deleteTask(@Path("id") id: Int): Response<Unit>
 }
