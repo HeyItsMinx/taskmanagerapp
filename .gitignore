@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+my-api/.idea/
+my-api/.vscode/
+my-api/node_modules/
+my-api/build/
+my-api/tmp/
+my-api/temp/

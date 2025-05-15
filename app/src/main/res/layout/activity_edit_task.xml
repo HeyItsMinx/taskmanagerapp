@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="?android:colorBackground">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Task"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="24dp"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Task Name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                android:textColor="?android:textColorSecondary" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTaskName"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Enter your Task Name"
+                android:inputType="text"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingTop="16dp"
+                android:paddingBottom="4dp"
+                android:textColor="?android:textColorSecondary" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTaskDescription"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="12dp"
+                android:hint="Task Description"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:maxLines="6" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Task Type"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="?android:textColorSecondary" />
+
+            <RadioGroup
+                android:id="@+id/rgTaskType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbImportant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Important"
+                    android:textStyle="normal"
+                    android:textSize="20sp"
+                    android:checked="true" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbUrgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Urgent"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbRegular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Regular"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="24dp"
+                android:weightSum="2">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSave"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:text="Save"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:iconPadding="0dp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCancel"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:text="Cancel"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+    <!--Back Button-->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/teal_700"
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_button_background"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            app:tint="@android:color/white" />
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

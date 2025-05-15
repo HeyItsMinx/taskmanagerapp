@@ -1,15 +1,32 @@
 {
-  "name": "my-api",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+   "name": "my-api",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "type": "commonjs",
+   "devDependencies": {
+      "@types/express": "^5.0.1",
+      "@types/node": "^22.15.18",
+      "concurrently": "^9.1.2",
+      "ts-node": "^10.9.2",
+      "ts-node-dev": "^2.0.0",
+      "typescript": "^5.8.3"
+   },
+   "dependencies": {
+      "body-parser": "^2.2.0",
+      "cors": "^2.8.5",
+      "dotenv": "^16.5.0",
+      "express": "^5.1.0",
+      "morgan": "^1.10.0",
+      "mysql2": "^3.14.1",
+      "reflect-metadata": "^0.2.2",
+      "typeorm": "0.3.23"
+   },
+   "scripts": {
+      "watch": "tsc -w",
+      "dev": "ts-node-dev src/index.ts",
+      "start": "ts-node src/index.ts",
+      "build": "tsc",
+      "typeorm": "typeorm-ts-node-commonjs",
+      "migration": " npm run typeorm migration:run -- -d ./src/data-source.ts"
+   }
 }
