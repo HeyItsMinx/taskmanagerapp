@@ -12,7 +12,7 @@ interface ApiService {
     suspend fun getCategories(): CategoryResponse
 
     @POST("tasks")
-    suspend fun createTask(@Body task: Map<String, Any>): Response<Unit>
+    suspend fun createTask(@Body task: TaskRequest): Response<Unit>
 
     @PUT("tasks/{id}")
     suspend fun updateTask(@Path("id") id: Int, @Body task: Map<String, Any>): Response<Unit>

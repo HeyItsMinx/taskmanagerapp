@@ -1,4 +1,7 @@
 package com.example.taskmanagerapp.model
 
-class TaskRequest {
-}
+data class TaskRequest(
+    val title: String,
+    val description: String?,
+    val category_id: Int
+)

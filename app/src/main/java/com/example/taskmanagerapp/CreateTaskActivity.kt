@@ -3,9 +3,13 @@ package com.example.taskmanagerapp.ui.createtask
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.taskmanagerapp.api.ApiClient
 import com.example.taskmanagerapp.databinding.ActivityCreateTaskBinding
 import com.example.taskmanagerapp.model.Category
-import com.example.taskmanagerapp.model.Task
+import com.example.taskmanagerapp.model.TaskRequest
+import kotlinx.coroutines.launch
+import android.util.Log
 
 class CreateTaskActivity : AppCompatActivity() {
 
@@ -24,7 +28,7 @@ class CreateTaskActivity : AppCompatActivity() {
                 binding.rbImportant.id -> Category(1, "Important")
                 binding.rbUrgent.id -> Category(2, "Urgent")
                 binding.rbRegular.id -> Category(3, "Regular")
-                else -> Category(3, "Regular") // fallback
+                else -> Category(3, "Regular")
             }
 
             if (taskName.isEmpty()) {
@@ -32,18 +36,28 @@ class CreateTaskActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val newTask = Task(
-                id = 0, // should be assigned by backend/db
+            // 🔁 Prepare request body
+            val taskRequest = TaskRequest(
                 title = taskName,
-                category = selectedCategory,
-                description = taskDescription.takeIf { it.isNotEmpty() },
-                done = false,
-                updated_at = "" // current timestamp
+                description = taskDescription,
+                category_id = selectedCategory.id
             )
 
-            // TODO: Save newTask to DB or API here
-            Toast.makeText(this, "Task saved: $newTask", Toast.LENGTH_LONG).show()
-            finish() // Close this activity after saving
+            // 🌐 Call API
+            lifecycleScope.launch {
+                try {
+                    val response = ApiClient.apiService.createTask(taskRequest)
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@CreateTaskActivity, "Task successfully created!", Toast.LENGTH_SHORT).show()
+                        finish() // Close
+                    } else {
+                        Toast.makeText(this@CreateTaskActivity, "Failed to create task", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Log.e("CreateTaskActivity", "API call failed", e)
+                    Toast.makeText(this@CreateTaskActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         binding.btnCancel.setOnClickListener {

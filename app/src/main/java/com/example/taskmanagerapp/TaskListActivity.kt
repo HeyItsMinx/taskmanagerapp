@@ -31,8 +31,8 @@ class TaskListActivity : AppCompatActivity() {
     private val tasks = mutableListOf<Task>()
     private var categoryFilter: String? = null
 
-    // Toggle dummy data usage here:
-    private val useDummyData = true
+    // Toggle dummy data
+    private val useDummyData = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +46,12 @@ class TaskListActivity : AppCompatActivity() {
             insets
         }
 
-        // Access custom views from included toolbar layout
+        // Access custom views
         tvCategory = findViewById(R.id.tvCategory)
         tvTaskCount = findViewById(R.id.tvTaskCount)
         btnAdd = findViewById(R.id.btnAdd)
 
-        // Apply underline to task count TextView
+        // Apply underline to task count
         tvTaskCount.paintFlags = tvTaskCount.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
         // Get category filter from intent extras
@@ -59,7 +59,6 @@ class TaskListActivity : AppCompatActivity() {
 
         // Setup add task button click
         btnAdd.setOnClickListener {
-            // TODO: Start CreateTaskActivity
             val intent = Intent(this, CreateTaskActivity::class.java)
             startActivity(intent)
         }
