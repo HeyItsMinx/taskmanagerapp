@@ -1,5 +1,6 @@
 package com.example.taskmanagerapp.ui.tasklist
 
+import android.app.AlertDialog
 import android.graphics.Paint
 import android.os.Bundle
 import android.widget.ImageButton
@@ -16,6 +17,7 @@ import com.example.taskmanagerapp.adapter.TaskAdapter
 import com.example.taskmanagerapp.api.ApiClient
 import com.example.taskmanagerapp.databinding.ActivityTaskListBinding
 import com.example.taskmanagerapp.ui.createtask.CreateTaskActivity
+import android.widget.Toast
 import com.example.taskmanagerapp.model.Category
 import com.example.taskmanagerapp.model.Task
 import com.example.taskmanagerapp.dummy.DummyData
@@ -33,6 +35,8 @@ class TaskListActivity : AppCompatActivity() {
 
     // Toggle dummy data
     private val useDummyData = false
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +61,10 @@ class TaskListActivity : AppCompatActivity() {
         // Get category filter from intent extras
         categoryFilter = intent.getStringExtra("category_name")
 
+        tvCategory.setOnClickListener {
+            showCategoryPicker()
+        }
+
         // Setup add task button click
         btnAdd.setOnClickListener {
             val intent = Intent(this, CreateTaskActivity::class.java)
@@ -71,6 +79,39 @@ class TaskListActivity : AppCompatActivity() {
         tvCategory.text = categoryName?.takeIf { it.isNotBlank() } ?: "All."
         tvTaskCount.text = taskCount.toString()
     }
+
+    private fun showCategoryPicker() {
+        lifecycleScope.launch {
+            try {
+                val categoryResponse = ApiClient.apiService.getCategories()
+                val categoryNames = mutableListOf("All.") // add All option
+                val nameToIdMap = mutableMapOf<String, String?>(Pair("All.", null))
+
+                categoryResponse.data.forEach {
+                    categoryNames.add(it.name)
+                    nameToIdMap[it.name] = it.name
+                }
+
+                val selectedIndex = categoryNames.indexOf(categoryFilter ?: "All.")
+
+                AlertDialog.Builder(this@TaskListActivity)
+                    .setTitle("Choose Category")
+                    .setSingleChoiceItems(categoryNames.toTypedArray(), selectedIndex) { dialog, which ->
+                        val selectedName = categoryNames[which]
+                        categoryFilter = nameToIdMap[selectedName]
+                        fetchTasks()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@TaskListActivity, "Failed to load categories", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     private fun fetchTasks() {
         lifecycleScope.launch {
@@ -118,4 +159,6 @@ class TaskListActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
