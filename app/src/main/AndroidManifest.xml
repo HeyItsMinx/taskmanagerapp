@@ -14,6 +14,8 @@
         android:theme="@style/Theme.TaskManagerApp"
         tools:targetApi="31">
 
+        <activity android:name=".ui.tasklist.TaskListActivity" />
+        <activity android:name=".ui.createtask.CreateTaskActivity"/>
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
