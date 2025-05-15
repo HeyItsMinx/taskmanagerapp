@@ -4,10 +4,20 @@ import { tasksRepository } from "../repository";
 export class TaskController {
     static async getAllTasks(req: Request, res: Response, next: NextFunction) {
         try {
+            
+            const category = (typeof req.query.category === "string") ? req.query.category : null;
+            const doneString = (["true", "false"].includes(req.query.done as string)) ? req.query.done : null;
+            const done = doneString ? (doneString === "true") : null
+    
             const tasks = await tasksRepository.find({
                 select: {category:{name:true}},
-                relations: {category: true}
+                relations: {category: true},
+                where: {
+                    category: {name: category},
+                    done
+                }
             });
+            
             res.status(200).json({
                 data: tasks
             })
