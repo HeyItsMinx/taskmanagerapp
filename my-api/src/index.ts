@@ -1,17 +1,26 @@
 import { AppDataSource } from "./data-source";
 import * as express from "express";
 import * as dotenv from "dotenv";
-import { Request, Response } from "express";
+import * as morgan from "morgan";
+
 import "reflect-metadata";
+import { taskRoute } from "./route/task.route";
+import { errorHandler } from "./middleware";
+import { categoryRoute } from "./route/category.route";
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 const { PORT = 3000 } = process.env;
+const PREFIX = "/api";
+app.use(express.json());
+app.use(morgan("combined"));
 
-// app.get("*", (req: Request, res: Response) => {
-//   res.status(505).json({ message: "Bad Request" });
-// });
+// routes
+app.use(`${PREFIX}/task`, taskRoute);
+app.use(`${PREFIX}/category`, categoryRoute);
+
+
+app.use(errorHandler);
 
 AppDataSource.initialize()
   .then(async () => {

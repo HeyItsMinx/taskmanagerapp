@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, ManyToOne, OneToMany } from "typeorm"
 import { Task } from "./task.entity"
 
-@Entity()
+@Entity({name: 'categories'})
 export class Category {
     @PrimaryGeneratedColumn()
     id: number

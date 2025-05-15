@@ -1,8 +1,7 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { Task } from "./entity/task.entity"
-import { Category } from "./entity/category.entity";
 import * as dotenv from "dotenv";
+import { Category, Task } from "./entity";
 
 dotenv.config();
 
@@ -17,7 +16,7 @@ export const AppDataSource = new DataSource({
     username: MYSQL_USERNAME,
     password: MYSQL_PASSWORD,
     database: MYSQL_DBNAME || "tmdb",
-    synchronize: true,
+    synchronize: false,
     logging: false,
     entities: [Task, Category],
     migrations: [__dirname + "/migration/*.ts"],
