@@ -86,7 +86,7 @@ class TaskListActivity : AppCompatActivity() {
             onDone = { task ->
                 lifecycleScope.launch {
                     try {
-                        val newDoneState = !task.done
+                        val newDoneState = true
                         val body = mapOf("done" to newDoneState)
                         val response = ApiClient.apiService.updateTask(task.id, body)
                         if (response.isSuccessful) {
