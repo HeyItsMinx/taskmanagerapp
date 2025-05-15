@@ -1,4 +1,4 @@
-📋 Task Manager Android App Using Kotlin
+##📋 Task Manager Android App Using Kotlin
 This project is part of a Task Manager application, built with a Kotlin-based Android frontend and a Node.js + Express + TypeScript backend.
 The backend provides a RESTful API to manage tasks — allowing users to create, read, update, and delete (CRUD) their tasks. The data is persisted using a PostgreSQL database running in Docker.
 
