@@ -46,6 +46,7 @@ class CreateTaskActivity : AppCompatActivity() {
                     val response = ApiClient.apiService.createTask(taskBody)
                     if (response.isSuccessful) {
                         Toast.makeText(this@CreateTaskActivity, "Task successfully created!", Toast.LENGTH_SHORT).show()
+                        setResult(RESULT_OK)
                         finish()
                     } else {
                         val errorBody = response.errorBody()?.string()

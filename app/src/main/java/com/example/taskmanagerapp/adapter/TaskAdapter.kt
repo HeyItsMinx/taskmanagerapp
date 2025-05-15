@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanagerapp.R
 import com.example.taskmanagerapp.model.Task
+import android.util.Log
 
 class TaskAdapter(
     private val tasks: List<Task>,
@@ -31,22 +33,67 @@ class TaskAdapter(
         return TaskViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = tasks[position]
-        holder.title.text = task.title
-        holder.category.text = task.category.name
-        holder.updated.text = task.updated_at
-        holder.description.text = task.description ?: ""
 
-        holder.btnEdit.setOnClickListener { onEdit(task) }
-        holder.btnDone.setOnClickListener { onDone(task) }
-        holder.btnDelete.setOnClickListener { onDelete(task) }
+    private fun formatDate(isoDate: String): String {
+        return try {
+            val parser = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault())
+            parser.timeZone = java.util.TimeZone.getTimeZone("UTC")
+            val date = parser.parse(isoDate)
 
-        if (task.done) {
-            holder.btnEdit.isEnabled = false
-            holder.btnDelete.isEnabled = false
+            val formatter = java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", java.util.Locale.getDefault())
+            "Updated: ${formatter.format(date!!)}"
+        } catch (e: Exception) {
+            "Updated: $isoDate"
         }
     }
 
+    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
+        val task = tasks[position]
+
+        holder.title.text = task.title
+        holder.category.text = task.category.name
+        holder.updated.text = formatDate(task.updated_at)
+        holder.description.text = task.description ?: ""
+
+        holder.btnEdit.setOnClickListener { onEdit(task) }
+        holder.btnDelete.setOnClickListener { onDelete(task) }
+
+        // Toggle done / undone
+        holder.btnDone.text = if (task.done) "Undone" else "Done"
+        holder.btnDone.setOnClickListener { onDone(task) }
+
+        if (task.done) {
+            val gray = ContextCompat.getColor(holder.itemView.context, android.R.color.darker_gray)
+            holder.title.setTextColor(gray)
+            holder.category.setTextColor(gray)
+            holder.updated.setTextColor(gray)
+            holder.description.setTextColor(gray)
+
+            holder.btnEdit.alpha = 0.4f
+            holder.btnDone.alpha = 0.4f
+            holder.btnDelete.alpha = 0.4f
+
+            holder.btnEdit.isEnabled = false
+            holder.btnDelete.isEnabled = false
+        } else {
+            val black = ContextCompat.getColor(holder.itemView.context, android.R.color.black)
+            val gray = ContextCompat.getColor(holder.itemView.context, android.R.color.darker_gray)
+
+            holder.title.setTextColor(black)
+            holder.category.setTextColor(gray)
+            holder.updated.setTextColor(gray)
+            holder.description.setTextColor(black)
+
+            holder.btnEdit.alpha = 1f
+            holder.btnDone.alpha = 1f
+            holder.btnDelete.alpha = 1f
+
+            holder.btnEdit.isEnabled = true
+            holder.btnDelete.isEnabled = true
+        }
+    }
+
+
     override fun getItemCount() = tasks.size
+
 }

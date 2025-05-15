@@ -12,8 +12,8 @@ export class Task {
     @Column()
     description:string;
 
-    @UpdateDateColumn({ name: 'updated_at' })
-    updatedAt: Date;
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updated_at: Date;
 
     @Column()
     done:boolean;
