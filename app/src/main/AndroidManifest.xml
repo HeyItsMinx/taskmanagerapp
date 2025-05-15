@@ -17,6 +17,7 @@
 
         <activity android:name=".ui.tasklist.TaskListActivity" />
         <activity android:name=".ui.createtask.CreateTaskActivity"/>
+        <activity android:name=".ui.edittask.EditTaskActivity" />
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

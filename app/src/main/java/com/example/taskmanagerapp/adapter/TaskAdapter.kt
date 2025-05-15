@@ -9,7 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanagerapp.R
 import com.example.taskmanagerapp.model.Task
-import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TaskAdapter(
     private val tasks: List<Task>,
@@ -33,14 +34,12 @@ class TaskAdapter(
         return TaskViewHolder(view)
     }
 
-
     private fun formatDate(isoDate: String): String {
         return try {
-            val parser = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault())
-            parser.timeZone = java.util.TimeZone.getTimeZone("UTC")
+            val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            parser.timeZone = TimeZone.getTimeZone("UTC")
             val date = parser.parse(isoDate)
-
-            val formatter = java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", java.util.Locale.getDefault())
+            val formatter = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
             "Updated: ${formatter.format(date!!)}"
         } catch (e: Exception) {
             "Updated: $isoDate"
@@ -55,26 +54,32 @@ class TaskAdapter(
         holder.updated.text = formatDate(task.updated_at)
         holder.description.text = task.description ?: ""
 
+        // Change text on button
+        holder.btnDone.text = if (task.done) "Undone" else "Done"
+
+        // Set button click events
         holder.btnEdit.setOnClickListener { onEdit(task) }
+        holder.btnDone.setOnClickListener { onDone(task) }
         holder.btnDelete.setOnClickListener { onDelete(task) }
 
-        // Toggle done / undone
-        holder.btnDone.text = if (task.done) "Undone" else "Done"
-        holder.btnDone.setOnClickListener { onDone(task) }
-
+        // Apply UI state based on done status
         if (task.done) {
-            val gray = ContextCompat.getColor(holder.itemView.context, android.R.color.darker_gray)
-            holder.title.setTextColor(gray)
-            holder.category.setTextColor(gray)
-            holder.updated.setTextColor(gray)
-            holder.description.setTextColor(gray)
+            val grayColor = ContextCompat.getColor(holder.itemView.context, android.R.color.darker_gray)
 
-            holder.btnEdit.alpha = 0.4f
-            holder.btnDone.alpha = 0.4f
-            holder.btnDelete.alpha = 0.4f
+            // Grey out text
+            holder.title.setTextColor(grayColor)
+            holder.category.setTextColor(grayColor)
+            holder.updated.setTextColor(grayColor)
+            holder.description.setTextColor(grayColor)
 
-            holder.btnEdit.isEnabled = false
-            holder.btnDelete.isEnabled = false
+            // Hide edit and delete buttons
+            holder.btnEdit.visibility = View.GONE
+            holder.btnDelete.visibility = View.GONE
+
+            // Update Done button to be final state
+            holder.btnDone.text = "Done"
+            holder.btnDone.isEnabled = false
+            holder.btnDone.alpha = 0.5f
         } else {
             val black = ContextCompat.getColor(holder.itemView.context, android.R.color.black)
             val gray = ContextCompat.getColor(holder.itemView.context, android.R.color.darker_gray)
@@ -84,16 +89,17 @@ class TaskAdapter(
             holder.updated.setTextColor(gray)
             holder.description.setTextColor(black)
 
-            holder.btnEdit.alpha = 1f
-            holder.btnDone.alpha = 1f
-            holder.btnDelete.alpha = 1f
+            // Show buttons
+            holder.btnEdit.visibility = View.VISIBLE
+            holder.btnDelete.visibility = View.VISIBLE
 
-            holder.btnEdit.isEnabled = true
-            holder.btnDelete.isEnabled = true
+            // Enable Done button
+            holder.btnDone.text = "Done"
+            holder.btnDone.isEnabled = true
+            holder.btnDone.alpha = 1f
         }
+
     }
 
-
     override fun getItemCount() = tasks.size
-
 }

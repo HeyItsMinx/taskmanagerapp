@@ -21,6 +21,7 @@ import com.example.taskmanagerapp.databinding.ActivityTaskListBinding
 import com.example.taskmanagerapp.dummy.DummyData
 import com.example.taskmanagerapp.model.Task
 import com.example.taskmanagerapp.ui.createtask.CreateTaskActivity
+import com.example.taskmanagerapp.ui.edittask.EditTaskActivity
 import kotlinx.coroutines.launch
 
 class TaskListActivity : AppCompatActivity() {
@@ -71,9 +72,17 @@ class TaskListActivity : AppCompatActivity() {
             createTaskLauncher.launch(intent)
         }
 
-        // Initialize the adapter with the tasks list and lambdas
+        // Initialize the adapter with the tasks list to edit a certain task
         taskAdapter = TaskAdapter(tasks,
-            onEdit = { /* TODO */ },
+            onEdit = { task ->
+                val intent = Intent(this, EditTaskActivity::class.java).apply {
+                    putExtra("task_id", task.id)
+                    putExtra("title", task.title)
+                    putExtra("description", task.description)
+                    putExtra("category_name", task.category.name)
+                }
+                createTaskLauncher.launch(intent) // Reuse existing launcher
+            },
             onDone = { task ->
                 lifecycleScope.launch {
                     try {

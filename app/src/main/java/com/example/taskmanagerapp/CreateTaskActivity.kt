@@ -9,6 +9,8 @@ import com.example.taskmanagerapp.databinding.ActivityCreateTaskBinding
 import com.example.taskmanagerapp.model.Category
 import kotlinx.coroutines.launch
 import android.util.Log
+import android.widget.ImageButton
+import com.example.taskmanagerapp.R
 
 class CreateTaskActivity : AppCompatActivity() {
 
@@ -18,6 +20,11 @@ class CreateTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val btnBack: ImageButton = findViewById(R.id.btnBack)
+        btnBack.setOnClickListener {
+            finish()
+        }
 
         binding.btnSave.setOnClickListener {
             val taskName = binding.etTaskName.text.toString().trim()
