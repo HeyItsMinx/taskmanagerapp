@@ -15,10 +15,7 @@ interface ApiService {
     suspend fun createTask(@Body task: Map<String, @JvmSuppressWildcards Any>): Response<Unit>
 
     @PUT("api/task/{id}")
-    suspend fun updateTask(@Path("id") id: Int, @Body task: Map<String, @JvmSuppressWildcards Any>): Response<Unit> // ✅ Safe
-
-    @PUT("api/task/{id}/done")
-    suspend fun finishTask(@Path("id") id: Int): Response<Unit>
+    suspend fun updateTask(@Path("id") id: Int, @Body task: Map<String, @JvmSuppressWildcards Any>): Response<Unit>
 
     @DELETE("api/task/{id}")
     suspend fun deleteTask(@Path("id") id: Int): Response<Unit>

@@ -67,7 +67,7 @@ export class TaskController {
         try {
             const id = parseInt(req.params.id);
             
-            const { title, description, category_id  } = req.body;
+            const { title, description, category_id, done } = req.body;
 
             const task = await tasksRepository.findOne({
                 where: {id},
@@ -83,6 +83,7 @@ export class TaskController {
             task.title = title;
             task.description = description;
             task.category.id = category_id;
+            task.done = done;
             
             const updatedTask = await tasksRepository.save(task);
 

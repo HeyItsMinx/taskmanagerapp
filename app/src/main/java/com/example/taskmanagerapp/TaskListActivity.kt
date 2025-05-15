@@ -29,12 +29,12 @@ class TaskListActivity : AppCompatActivity() {
     private lateinit var tvCategory: TextView
     private lateinit var tvTaskCount: TextView
     private lateinit var btnAdd: ImageButton
+    private lateinit var taskAdapter: TaskAdapter  // Declare adapter here
 
     private val tasks = mutableListOf<Task>()
     private var categoryFilter: String? = null
     private val useDummyData = false
 
-    // ✅ Register Activity Result Launcher
     private val createTaskLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -68,10 +68,57 @@ class TaskListActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener {
             val intent = Intent(this, CreateTaskActivity::class.java)
-            createTaskLauncher.launch(intent) // ✅ use launcher instead of startActivity
+            createTaskLauncher.launch(intent)
         }
 
+        // Initialize the adapter with the tasks list and lambdas
+        taskAdapter = TaskAdapter(tasks,
+            onEdit = { /* TODO */ },
+            onDone = { task ->
+                lifecycleScope.launch {
+                    try {
+                        val newDoneState = !task.done
+                        val body = mapOf("done" to newDoneState)
+                        val response = ApiClient.apiService.updateTask(task.id, body)
+                        if (response.isSuccessful) {
+                            task.done = newDoneState
+                            tasks.sortWith(compareBy({ it.done }, { it.updated_at }))
+                            updateToolbar(categoryFilter, tasks.size)
+                            taskAdapter.notifyDataSetChanged()
+                        } else {
+                            Toast.makeText(this@TaskListActivity, "Failed to update task", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this@TaskListActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            },
+            onDelete = { task ->
+                lifecycleScope.launch {
+                    if (!useDummyData) {
+                        val response = ApiClient.apiService.deleteTask(task.id)
+                        if (response.isSuccessful) {
+                            tasks.remove(task)
+                            taskAdapter.notifyDataSetChanged()
+                            updateToolbar(categoryFilter, tasks.size)
+                            Toast.makeText(this@TaskListActivity, "Task deleted", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val errorBody = response.errorBody()?.string()
+                            Toast.makeText(this@TaskListActivity, "Failed to delete task: $errorBody", Toast.LENGTH_LONG).show()
+                        }
+                    } else {
+                        tasks.remove(task)
+                        taskAdapter.notifyDataSetChanged()
+                        updateToolbar(categoryFilter, tasks.size)
+                    }
+                }
+            }
+        )
+
         binding.recyclerViewTasks.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewTasks.adapter = taskAdapter
+
         fetchTasks()
     }
 
@@ -131,50 +178,9 @@ class TaskListActivity : AppCompatActivity() {
                 tasks.sortWith(compareBy({ it.done }, { it.updated_at }))
                 updateToolbar(categoryFilter, tasks.size)
 
-                binding.recyclerViewTasks.adapter = TaskAdapter(tasks,
-                    onEdit = { /* TODO */ },
-                    onDone = { task ->
-                        lifecycleScope.launch {
-                            val newDoneState = !task.done // Toggle
-                            val body = mapOf("done" to newDoneState)
+                // Notify adapter data changed, no re-creation here!
+                taskAdapter.notifyDataSetChanged()
 
-                            val response = ApiClient.apiService.updateTask(task.id, body)
-                            if (response.isSuccessful) {
-                                task.done = newDoneState
-                                // Re-sort to move done tasks to bottom
-                                tasks.sortWith(compareBy({ it.done }, { it.updated_at }))
-                                binding.recyclerViewTasks.adapter?.notifyDataSetChanged()
-                                updateToolbar(categoryFilter, tasks.size)
-                            } else {
-                                Toast.makeText(
-                                    this@TaskListActivity,
-                                    "Failed to update task",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    },
-                    onDelete = { task ->
-                        lifecycleScope.launch {
-                            if (!useDummyData) {
-                                val response = ApiClient.apiService.deleteTask(task.id)
-                                if (response.isSuccessful) {
-                                    tasks.remove(task)
-                                    binding.recyclerViewTasks.adapter?.notifyDataSetChanged()
-                                    updateToolbar(categoryFilter, tasks.size)
-                                    Toast.makeText(this@TaskListActivity, "Task deleted", Toast.LENGTH_SHORT).show()
-                                } else {
-                                    val errorBody = response.errorBody()?.string()
-                                    Toast.makeText(this@TaskListActivity, "Failed to delete task: $errorBody", Toast.LENGTH_LONG).show()
-                                }
-                            } else {
-                                tasks.remove(task)
-                                binding.recyclerViewTasks.adapter?.notifyDataSetChanged()
-                                updateToolbar(categoryFilter, tasks.size)
-                            }
-                        }
-                    }
-                )
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(this@TaskListActivity, "Failed to load tasks", Toast.LENGTH_SHORT).show()
@@ -182,3 +188,4 @@ class TaskListActivity : AppCompatActivity() {
         }
     }
 }
+
